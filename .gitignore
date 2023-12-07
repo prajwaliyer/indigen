@@ -3,10 +3,17 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# React
+frontend/indigen-frontend/node_modules/
+frontend/indigen-frontend/coverage/
+frontend/indigen-frontend/build/
+
+
 # C extensions
 *.so
 
 # Distribution / packaging
+client_secret_870786773908-jtq9ij3fviekdrsrai7vu22nlqcd672j.apps.googleusercontent.com.json
 .Python
 build/
 develop-eggs/
