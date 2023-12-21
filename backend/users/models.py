@@ -1,47 +1,46 @@
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.utils.translation import gettext_lazy as _
 from django.db import models
-
-# If you are customizing the user model
-class User(AbstractUser):
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-
-    # Add related_name for groups and user_permissions
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_('groups'),
-        blank=True,
-        help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
-        related_name="custom_user_set",  # Unique related_name
-        related_query_name="user",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        help_text=_('Specific permissions for this user.'),
-        related_name="custom_user_set",  # Unique related_name
-        related_query_name="user",
-    )
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
-# Model for Ratings and Reviews
-class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
-    content_id = models.IntegerField()  # Assuming content is identified by an integer ID
-    rating = models.DecimalField(max_digits=2, decimal_places=1)
-    review = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class UserAccountManager(BaseUserManager):
+    def create_user(self, email, name, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
 
-    class Meta:
-        unique_together = ('user', 'content_id')  # Each user can rate a piece of content only once
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name)
 
-# Model for Follow relationships
-class Follow(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
-    created_at = models.DateTimeField(auto_now_add=True)
+        user.set_password(password)
+        user.save()
 
-    class Meta:
-        unique_together = ('follower', 'followed')  # A user can't follow another user more than once
+        return user
+
+    def create_superuser(self, email, name, password):
+        user = self.create_user(email, name, password)
+
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
+    
+
+class UserAccount(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserAccountManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    def get_full_name(self):
+        return self.name
+    
+    def get_short_name(self):
+        return self.name
+    
+    def __str__(self):
+        return self.email
