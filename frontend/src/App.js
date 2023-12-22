@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from './containers/Home';
 import Signup from './containers/Signup';
@@ -24,6 +24,7 @@ const App = () => (
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
                     <Route path="/activate/:uid/:token" element={<Activate />} />
+                    <Route path="/logout" element={<Navigate to="/" />} />
                 </Routes>
             </Layout>    
         </Router>

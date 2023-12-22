@@ -1,13 +1,14 @@
+# Custom
+frontend/node_modules/
+frontend/coverage/
+frontend/build/
+frontend/.env
+backend/build/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# React
-frontend/node_modules/
-frontend/coverage/
-frontend/build/
-
 
 # C extensions
 *.so
