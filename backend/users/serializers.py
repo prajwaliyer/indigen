@@ -5,4 +5,4 @@ User = get_user_model()
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ['id', 'email', 'name', 'password']  # Specify the fields you want to include
+        fields = ['id', 'email', 'first_name', 'last_name','password']  # Specify the fields you want to include
