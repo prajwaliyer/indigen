@@ -1,23 +1,18 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import { useDispatch } from 'react-redux';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../actions/auth';
 
-const guestPages = ['Products', 'Pricing', 'Blog'];
+import { toggleDarkMode } from '../reducers/globalSlice';
+import theme from '../theme';
+import { useTheme } from '@mui/material/styles';
+
+const guestPages = ['DarkMode', 'Pricing', 'Blog'];
 const authPages = ['Products', 'Pricing', 'Blog', 'Dashboard'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -46,6 +41,14 @@ function Navbar({ logout, isAuthenticated }) {
     handleToggleUserMenu();
   };
 
+  const dispatch = useDispatch();
+  const theme = useTheme();
+
+  const handleToggleDarkMode = () => {
+    console.log("Hit");
+    dispatch(toggleDarkMode());
+  };
+
   const authLinks = () => (
     authPages.map((page) => (
       <Button
@@ -57,7 +60,7 @@ function Navbar({ logout, isAuthenticated }) {
         {page}
       </Button>
     ))
-    );
+  );
 
     const authMenuLinks = () => (
       authPages.map((page) => (
@@ -79,6 +82,7 @@ function Navbar({ logout, isAuthenticated }) {
         component={Link}
         to={`/${page.toLowerCase()}`}
         sx={{ my: 2, color: 'white', display: 'block' }}
+        onClick={page === 'DarkMode' ? handleToggleDarkMode : undefined}
       >
         {page}
       </Button>
@@ -101,7 +105,7 @@ function Navbar({ logout, isAuthenticated }) {
 
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.navbar.main }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

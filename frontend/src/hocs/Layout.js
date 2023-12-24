@@ -13,9 +13,6 @@ const Layout = (props) => {
         const state = values.state ? values.state : null;
         const code = values.code ? values.code : null;
         
-        console.log('State: ', state);
-        console.log('Code: ', code);
-        
         if (state && code) {
             props.googleAuthenticate(state, code);
         } else {
