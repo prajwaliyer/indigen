@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { reset_password } from '../actions/auth';
+import { useDispatch } from 'react-redux';
+import { resetPassword } from '../reducers/authSlice';
 
-const ResetPassword = ({ reset_password }) => {
+const ResetPassword = () => {
+  const dispatch = useDispatch();
+
   const [requestSent, setRequestSent] = useState(false);
   const [formData, setFormData] = useState({
     email:''
@@ -15,7 +17,7 @@ const ResetPassword = ({ reset_password }) => {
 
   const onSubmit = e => {
       e.preventDefault();
-      reset_password(email);
+      dispatch(resetPassword({ email }));
       setRequestSent(true);
   };
 
@@ -44,4 +46,4 @@ const ResetPassword = ({ reset_password }) => {
   );
 };
 
-export default connect(null, { reset_password })(ResetPassword);
+export default ResetPassword;

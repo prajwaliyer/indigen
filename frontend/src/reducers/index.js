@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import auth from "./auth";
-import globalSlice from "./globalSlice";
+import { combineReducers } from "@reduxjs/toolkit";
+import authSlice from "./authSlice";
+import themeSlice from "./theme";
 
 export default combineReducers({
-    auth,
-    theme: globalSlice,
+    auth: authSlice,
+    theme: themeSlice,
 });

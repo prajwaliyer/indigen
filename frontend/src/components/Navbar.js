@@ -1,53 +1,28 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout } from '../actions/auth';
+import { logout } from '../reducers/authSlice';
 
-import { toggleDarkMode } from '../reducers/globalSlice';
-import theme from '../theme';
+import { toggleDarkMode } from '../reducers/theme';
 import { useTheme } from '@mui/material/styles';
 
 const guestPages = ['DarkMode', 'Pricing', 'Blog'];
 const authPages = ['Products', 'Pricing', 'Blog', 'Dashboard'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function Navbar({ logout, isAuthenticated }) {
-  const [openNavMenu, setOpenNavMenu] = React.useState(null);
-  const [openUserMenu, setOpenUserMenu] = React.useState(null);
-
-  const handleToggleNavMenu = (event) => {
-    if (openNavMenu) {
-      setOpenNavMenu(null);
-    } else {
-      setOpenNavMenu(event.currentTarget);
-    }
-  };
-
-  const handleToggleUserMenu = (event) => {
-    if (openUserMenu) {
-      setOpenUserMenu(null);
-    } else {
-      setOpenUserMenu(event.currentTarget);
-    }
-  };
-
-  const handleLogout = () => {
-    logout();
-    handleToggleUserMenu();
-  };
-
+function Navbar() {
+  // Imports
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const handleToggleDarkMode = () => {
-    console.log("Hit");
-    dispatch(toggleDarkMode());
-  };
+  // Initializations
+  const [openNavMenu, setOpenNavMenu] = React.useState(null);
+  const [openUserMenu, setOpenUserMenu] = React.useState(null);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const authLinks = () => (
     authPages.map((page) => (
@@ -102,7 +77,31 @@ function Navbar({ logout, isAuthenticated }) {
     ))
   );
 
+  // Handlers
+  const handleToggleNavMenu = (event) => {
+    if (openNavMenu) {
+      setOpenNavMenu(null);
+    } else {
+      setOpenNavMenu(event.currentTarget);
+    }
+  };
 
+  const handleToggleUserMenu = (event) => {
+    if (openUserMenu) {
+      setOpenUserMenu(null);
+    } else {
+      setOpenUserMenu(event.currentTarget);
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    handleToggleUserMenu();
+  };
+
+  const handleToggleDarkMode = () => {
+    dispatch(toggleDarkMode());
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: theme.palette.navbar.main }}>
@@ -222,8 +221,4 @@ function Navbar({ logout, isAuthenticated }) {
   );
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(mapStateToProps, { logout })(Navbar);
+export default Navbar;

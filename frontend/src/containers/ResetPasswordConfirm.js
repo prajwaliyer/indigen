@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { reset_password_confirm } from '../actions/auth';
+import { useDispatch } from 'react-redux';
+import { resetPasswordConfirm } from '../reducers/authSlice';
 
-const ResetPassword = ({ reset_password_confirm }) => {
+const ResetPassword = () => {
+  const dispatch = useDispatch();
+
   const [requestSent, setRequestSent] = useState(false);
   const [formData, setFormData] = useState({
     new_password:'',
@@ -21,7 +23,7 @@ const ResetPassword = ({ reset_password_confirm }) => {
     e.preventDefault();
     const uid = params[4];
     const token = params[5];
-    reset_password_confirm(uid,token,new_password, re_new_password);
+    dispatch(resetPasswordConfirm({ uid,token,new_password, re_new_password }));
     setRequestSent(true);
   };
 
@@ -63,4 +65,4 @@ const ResetPassword = ({ reset_password_confirm }) => {
   );
 };
 
-export default connect(null, { reset_password_confirm })(ResetPassword);
+export default ResetPassword;

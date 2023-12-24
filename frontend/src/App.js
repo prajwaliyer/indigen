@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { useSelector } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme.js'; // Your theme.js file
+import theme from './theme.js';
 
 const ThemedApp = () => {
     const mode = useSelector((state) => state.theme.mode);

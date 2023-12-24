@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { verify } from '../actions/auth';
+import { useDispatch } from 'react-redux';
+import { verify } from '../reducers/authSlice';
 
-const Activate = ({ verify }) => {
+const Activate = () => {
   const [verified, setVerified] = useState(false);
+
+  const dispatch = useDispatch();
 
   let location = useLocation();
   const params = location.pathname.split('/')
@@ -13,7 +15,7 @@ const Activate = ({ verify }) => {
   const verify_account = e => {
     const uid = params[2];
     const token = params[3];
-    verify(uid, token);
+    dispatch(verify({ uid, token }));
     setVerified(true);
   };
 
@@ -42,4 +44,4 @@ const Activate = ({ verify }) => {
   );
 };
 
-export default connect(null, { verify })(Activate);
+export default Activate;

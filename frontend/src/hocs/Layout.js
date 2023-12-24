@@ -1,32 +1,42 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { checkAuthenticated, load_user, googleAuthenticate } from '../actions/auth';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { checkAuthenticated, loadUser, googleAuthenticate } from '../reducers/authSlice';
 import queryString from 'query-string';
 
-const Layout = (props) => {
+const Layout = ({ children }) => {
+    const dispatch = useDispatch();
     let location = useLocation();
+    let navigate = useNavigate();
 
     useEffect(() => {
         const values = queryString.parse(location.search);
-        const state = values.state ? values.state : null;
-        const code = values.code ? values.code : null;
-        
-        if (state && code) {
-            props.googleAuthenticate(state, code);
+        const state = values.state;
+        const code = values.code;
+
+        if (location.pathname === '/login/callback' && state && code) {
+            dispatch(googleAuthenticate({ state, code }))
+              .unwrap()
+              .then(() => {
+                    dispatch(loadUser());
+                    navigate('/');
+              })
+              .catch((error) => {
+                    console.log(error);
+              });
         } else {
-            props.checkAuthenticated();
-            props.load_user();
+            dispatch(checkAuthenticated());
+            dispatch(loadUser());
         }
-    }, [location]);
+    }, [dispatch, location, navigate]);
     
     return (
         <div>
             <Navbar />
-            {props.children}
+            {children}
         </div>
     );
 };
 
-export default connect(null, { checkAuthenticated, load_user, googleAuthenticate })(Layout);
+export default Layout;

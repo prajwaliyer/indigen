@@ -1,11 +1,12 @@
-// globalSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-export const globalSlice = createSlice({
-  name: 'global',
-  initialState: {
-    mode: 'light',
-  },
+const initialState = {
+  mode: 'light',
+};
+
+export const themeSlice = createSlice({
+  name: 'theme',
+  initialState,
   reducers: {
     toggleDarkMode: (state) => {
       console.log('mode', state.mode);
@@ -14,5 +15,5 @@ export const globalSlice = createSlice({
   },
 });
 
-export const { toggleDarkMode } = globalSlice.actions;
-export default globalSlice.reducer;
+export const { toggleDarkMode } = themeSlice.actions;
+export default themeSlice.reducer;

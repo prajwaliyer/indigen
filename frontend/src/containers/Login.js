@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { login } from '../actions/auth';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../reducers/authSlice';
 import axios from 'axios';
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   const [formData, setFormData] = useState({
     email:'',
     password:''
@@ -17,7 +20,7 @@ const Login = ({ login, isAuthenticated }) => {
   const onSubmit = e => {
     e.preventDefault();
 
-    login(email, password);
+    dispatch(login({ email, password }));
   };
 
   const continueWithGoogle = async () => {
@@ -77,8 +80,4 @@ const Login = ({ login, isAuthenticated }) => {
   );
 };
 
-const mapStateToProps = state =>({
-  isAuthenticated : state.auth.isAuthenticated
-})
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;
