@@ -14,15 +14,6 @@ class UserAccountManager(BaseUserManager):
         user.save()
 
         return user
-
-    # def create_superuser(self, email, name, password):
-    #     user = self.create_user(email, name, password)
-
-    #     user.is_superuser = True
-    #     user.is_staff = True
-    #     user.save()
-
-    #     return user
     
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
@@ -45,3 +36,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.email
+    
+
+class Post(models.Model):
+    author = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='posts')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content[:50]

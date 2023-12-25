@@ -7,6 +7,7 @@ import Login from './containers/Login';
 import Activate from './containers/Activate';
 import ResetPassword from './containers/ResetPassword';
 import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
+import UserPage from './containers/UserPage';
 
 import Layout from './hocs/Layout';
 
@@ -32,6 +33,7 @@ const ThemedApp = () => {
               <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
               <Route path="/activate/:uid/:token" element={<Activate />} />
               <Route path="/logout" element={<Navigate to="/" />} />
+              <Route path="/users/:userId" element={<UserPage />} />
             </Routes>
           </Layout>    
         </Router>

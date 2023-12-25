@@ -54,7 +54,7 @@ const Signup = () => {
             className='form-control'
             type='text'
             placeholder='First Name'
-            name='first-name'
+            name='first_name'
             value={first_name}
             onChange={e => onChange(e)}
             required
@@ -65,7 +65,7 @@ const Signup = () => {
             className='form-control'
             type='text'
             placeholder='Last Name'
-            name='last-name'
+            name='last_name'
             value={last_name}
             onChange={e => onChange(e)}
             required
