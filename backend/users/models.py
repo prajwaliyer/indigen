@@ -22,6 +22,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    followers = models.ManyToManyField('self', related_name='following', symmetrical=False)
 
     objects = UserAccountManager()
 
@@ -41,6 +42,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 class Post(models.Model):
     author = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField()
+    video_url = models.URLField(max_length=1024, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

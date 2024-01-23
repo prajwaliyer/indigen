@@ -8,6 +8,9 @@ import Activate from './containers/Activate';
 import ResetPassword from './containers/ResetPassword';
 import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
 import UserPage from './containers/UserPage';
+import FollowersList from './containers/FollowersList';
+import FollowingList from './containers/FollowingList';
+import VideoPlayer from './components/VideoPlayer';
 
 import Layout from './hocs/Layout';
 
@@ -34,6 +37,9 @@ const ThemedApp = () => {
               <Route path="/activate/:uid/:token" element={<Activate />} />
               <Route path="/logout" element={<Navigate to="/" />} />
               <Route path="/users/:userId" element={<UserPage />} />
+              <Route path="/users/:userId/followers" element={<FollowersList />} />
+              <Route path="/users/:userId/following" element={<FollowingList />} />
+              <Route path="/watch/:videoKey" element={<VideoPlayer />} />
             </Routes>
           </Layout>    
         </Router>

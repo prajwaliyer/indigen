@@ -10,6 +10,11 @@ urlpatterns = [
     path('auth/', include('djoser.social.urls')),
     path('users/<int:user_id>/posts/', user_views.get_user_posts, name='get_user_posts'),
     path('posts/create/', user_views.create_post, name='create_post'),
+    path('users/<int:user_id>/follow/', user_views.follow_user, name='follow_user'),
+    path('users/<int:user_id>/unfollow/', user_views.unfollow_user, name='unfollow_user'),
+    path('users/<int:user_id>/followers/', user_views.get_followers, name='get_followers'),
+    path('users/<int:user_id>/following/', user_views.get_following, name='get_following'),
+    path('get-presigned-url/', user_views.get_presigned_url, name='get_presigned_url'),
 ]
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
