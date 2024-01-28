@@ -7,7 +7,7 @@ from .models import Post, UserAccount
 from rest_framework.permissions import AllowAny
 import boto3
 from django.conf import settings
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 import uuid
 
 @api_view(['GET'])
@@ -45,7 +45,7 @@ def get_presigned_url(request):
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
     video_type = request.GET.get('video_type', 'video')  # Default to 'video' if not specified
-    unique_filename = f"{uuid.uuid4()}_{file_name}"
+    unique_filename = f"{uuid.uuid4()}"
 
     key_prefix = 'trailers/' if video_type == 'trailer' else 'videos/'
     try:
@@ -58,6 +58,13 @@ def get_presigned_url(request):
     except NoCredentialsError:
         return Response({'error': 'Error generating presigned URL'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def list_posts(request):
+    posts = Post.objects.all()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+    
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def follow_user(request, user_id):

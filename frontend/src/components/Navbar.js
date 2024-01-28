@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import indigenLogo from '../assets/indigen_logo.png';
-
 
 import { Link } from 'react-router-dom';
 import { logout } from '../reducers/authSlice';
@@ -144,20 +143,24 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, justifyContent: 'center' }}>
-            <img
-              src={indigenLogo}
-              alt="Indigen Logo"
-              style={{ height: '50px' }}
-            />
+            <Link to="/">
+              <img
+                src={indigenLogo}
+                alt="Indigen Logo"
+                style={{ height: '50px' }}
+              />
+            </Link>
           </Box>
 
           {/* Desktop view */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
-            <img
-              src={indigenLogo}
-              alt="Indigen Logo"
-              style={{ height: '50px' }}
-            />
+            <Link to="/">
+              <img
+                src={indigenLogo}
+                alt="Indigen Logo"
+                style={{ height: '50px' }}
+              />
+            </Link>
           </Box>
           
           <Box sx={{ flexGrow: 1, justifyContent: 'center', display: { xs: 'none', md: 'flex' } }}>

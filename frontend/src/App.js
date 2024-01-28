@@ -20,6 +20,8 @@ import { useSelector } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme.js';
 import CssBaseline from '@mui/material/CssBaseline';
+import Create from './containers/Create.js';
+import CreatePost from './components/CreatePost.js';
 
 const ThemedApp = () => {
     const mode = useSelector((state) => state.theme.mode);
@@ -32,6 +34,7 @@ const ThemedApp = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/create" element={<CreatePost />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/reset-password" element={<ResetPassword />} />
