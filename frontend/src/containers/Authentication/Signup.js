@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { signup } from '../reducers/authSlice';
+import { signup } from '../../reducers/authSlice';
 import axios from 'axios';
 
 const Signup = () => {

@@ -2,7 +2,9 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import indigenLogo from '../assets/indigen_logo.png';
+
 
 import { Link } from 'react-router-dom';
 import { logout } from '../reducers/authSlice';
@@ -10,9 +12,9 @@ import { logout } from '../reducers/authSlice';
 import { toggleDarkMode } from '../reducers/theme';
 import { useTheme } from '@mui/material/styles';
 
-const guestPages = ['DarkMode', 'Pricing', 'Blog'];
-const authPages = ['Products', 'Pricing', 'Blog', 'Dashboard'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const guestPages = ['Discover', 'Trending', 'DarkMode'];
+const authPages = ['Discover', 'Trending', 'Create'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 function Navbar() {
   // Imports
@@ -107,26 +109,8 @@ function Navbar() {
     <AppBar position="static" sx={{ backgroundColor: theme.palette.navbar.main }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to='/'
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* Mobile view */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -158,33 +142,32 @@ function Navbar() {
               {isAuthenticated ? authMenuLinks() : guestMenuLinks()}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to='/'
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, justifyContent: 'center' }}>
+            <img
+              src={indigenLogo}
+              alt="Indigen Logo"
+              style={{ height: '50px' }}
+            />
+          </Box>
+
+          {/* Desktop view */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
+            <img
+              src={indigenLogo}
+              alt="Indigen Logo"
+              style={{ height: '50px' }}
+            />
+          </Box>
+          
+          <Box sx={{ flexGrow: 1, justifyContent: 'center', display: { xs: 'none', md: 'flex' } }}>
             {isAuthenticated ? authLinks() : guestLinks()}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleToggleUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleToggleUserMenu} sx={{ p: 0, fontSize: 'large' }}>
+                  <AccountCircleOutlinedIcon fontSize="large" />
               </IconButton>
             </Tooltip>
             <Menu

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { resetPasswordConfirm } from '../reducers/authSlice';
+import { resetPasswordConfirm } from '../../reducers/authSlice';
 
 const ResetPassword = () => {
   const dispatch = useDispatch();

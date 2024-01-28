@@ -43,6 +43,8 @@ class Post(models.Model):
     author = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField()
     video_url = models.URLField(max_length=1024, null=True, blank=True)
+    trailer_url = models.URLField(max_length=1024, null=True, blank=True)
+    cast_and_crew = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

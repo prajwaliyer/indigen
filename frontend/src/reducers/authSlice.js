@@ -182,71 +182,132 @@ const authSlice = createSlice({
             state.user = null;
         },
     },
-    extraReducers: {
-        // Load User
-        [loadUser.fulfilled]: (state, action) => {
-            state.user = action.payload;
-            state.isAuthenticated = true;
-        },
-        [loadUser.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Google Authenticate
-        [googleAuthenticate.fulfilled]: (state, action) => {
-            localStorage.setItem('access', action.payload.access);
-            state.access = action.payload.access;
-            state.refresh = action.payload.refresh;
-            state.isAuthenticated = true;
-        },
-        [googleAuthenticate.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Check Authenticated
-        [checkAuthenticated.fulfilled]: (state) => {
-            state.isAuthenticated = true;
-        },
-        [checkAuthenticated.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Login
-        [login.fulfilled]: (state, action) => {
-            localStorage.setItem('access', action.payload.access);
-            state.access = action.payload.access;
-            state.refresh = action.payload.refresh;
-            state.isAuthenticated = true;
-        },
-        [login.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Signup
-        [signup.fulfilled]: (state) => {
-            state.isAuthenticated = false;
-        },
-        [signup.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Verify
-        [verify.fulfilled]: (state) => {
-            state.isAuthenticated = true;
-        },
-        [verify.rejected]: (state) => {
-            state.isAuthenticated = false;
-        },
-        // Reset Password
-        [resetPassword.fulfilled]: (state) => {
-            // Handle reset password success
-        },
-        [resetPassword.rejected]: (state) => {
-            // Handle reset password fail
-        },
-        // Reset Password Confirm
-        [resetPasswordConfirm.fulfilled]: (state) => {
-            // Handle reset password confirm success
-        },
-        [resetPasswordConfirm.rejected]: (state) => {
-            // Handle reset password confirm fail
-        },
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadUser.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.isAuthenticated = true;
+            })
+            .addCase(loadUser.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(googleAuthenticate.fulfilled, (state, action) => {
+                localStorage.setItem('access', action.payload.access);
+                state.access = action.payload.access;
+                state.refresh = action.payload.refresh;
+                state.isAuthenticated = true;
+            })
+            .addCase(googleAuthenticate.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(checkAuthenticated.fulfilled, (state) => {
+                state.isAuthenticated = true;
+            })
+            .addCase(checkAuthenticated.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                localStorage.setItem('access', action.payload.access);
+                state.access = action.payload.access;
+                state.refresh = action.payload.refresh;
+                state.isAuthenticated = true;
+            })
+            .addCase(login.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(signup.fulfilled, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(signup.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(verify.fulfilled, (state) => {
+                state.isAuthenticated = true;
+            })
+            .addCase(verify.rejected, (state) => {
+                state.isAuthenticated = false;
+            })
+            .addCase(resetPassword.fulfilled, (state) => {
+                // Handle reset password success
+            })
+            .addCase(resetPassword.rejected, (state) => {
+                // Handle reset password fail
+            })
+            .addCase(resetPasswordConfirm.fulfilled, (state) => {
+                // Handle reset password confirm success
+            })
+            .addCase(resetPasswordConfirm.rejected, (state) => {
+                // Handle reset password confirm fail
+            });
     },
+
+
+
+    // extraReducers: {
+    //     // Load User
+    //     [loadUser.fulfilled]: (state, action) => {
+    //         state.user = action.payload;
+    //         state.isAuthenticated = true;
+    //     },
+    //     [loadUser.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Google Authenticate
+    //     [googleAuthenticate.fulfilled]: (state, action) => {
+    //         localStorage.setItem('access', action.payload.access);
+    //         state.access = action.payload.access;
+    //         state.refresh = action.payload.refresh;
+    //         state.isAuthenticated = true;
+    //     },
+    //     [googleAuthenticate.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Check Authenticated
+    //     [checkAuthenticated.fulfilled]: (state) => {
+    //         state.isAuthenticated = true;
+    //     },
+    //     [checkAuthenticated.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Login
+    //     [login.fulfilled]: (state, action) => {
+    //         localStorage.setItem('access', action.payload.access);
+    //         state.access = action.payload.access;
+    //         state.refresh = action.payload.refresh;
+    //         state.isAuthenticated = true;
+    //     },
+    //     [login.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Signup
+    //     [signup.fulfilled]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     [signup.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Verify
+    //     [verify.fulfilled]: (state) => {
+    //         state.isAuthenticated = true;
+    //     },
+    //     [verify.rejected]: (state) => {
+    //         state.isAuthenticated = false;
+    //     },
+    //     // Reset Password
+    //     [resetPassword.fulfilled]: (state) => {
+    //         // Handle reset password success
+    //     },
+    //     [resetPassword.rejected]: (state) => {
+    //         // Handle reset password fail
+    //     },
+    //     // Reset Password Confirm
+    //     [resetPasswordConfirm.fulfilled]: (state) => {
+    //         // Handle reset password confirm success
+    //     },
+    //     [resetPasswordConfirm.rejected]: (state) => {
+    //         // Handle reset password confirm fail
+    //     },
+    // },
 });
 
 export const { logout } = authSlice.actions;

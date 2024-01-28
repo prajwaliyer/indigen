@@ -17,13 +17,16 @@ const theme = (mode) => createTheme({
         }
         : {
             primary: {
-                main: '#556cd6',
+                main: '#0F0F0F',
             },
             secondary: {
                 main: '#19857b',
             },
+            background: {
+                default: '#0F0F0F',
+            },
             navbar: {
-                main: '#00FF00',
+                main: '#008170',
             },
         }),
     },

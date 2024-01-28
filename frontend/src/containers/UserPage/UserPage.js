@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import CreatePost from '../components/CreatePost';
-import PostsList from '../components/PostsList';
+import CreatePost from '../../components/CreatePost';
+import PostsList from '../../components/PostsList';
 import axios from 'axios';
 
 const UserPage = () => {

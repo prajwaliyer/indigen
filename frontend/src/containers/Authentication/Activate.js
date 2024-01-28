@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { verify } from '../reducers/authSlice';
+import { verify } from '../../reducers/authSlice';
 
 const Activate = () => {
   const [verified, setVerified] = useState(false);

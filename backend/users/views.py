@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny
 import boto3
 from django.conf import settings
 from botocore.exceptions import NoCredentialsError
-
+import uuid
 
 @api_view(['GET'])
 def users_view(request):
@@ -44,11 +44,14 @@ def get_presigned_url(request):
 
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
+    video_type = request.GET.get('video_type', 'video')  # Default to 'video' if not specified
+    unique_filename = f"{uuid.uuid4()}_{file_name}"
 
+    key_prefix = 'trailers/' if video_type == 'trailer' else 'videos/'
     try:
         presigned_url = s3_client.generate_presigned_url('put_object',
             Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': f"videos/{file_name}",
+                'Key': f"{key_prefix}{unique_filename}",
                 'ContentType': file_type},
             ExpiresIn=3600)
         return Response({'presigned_url': presigned_url})
