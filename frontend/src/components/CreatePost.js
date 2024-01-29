@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
+import { TextField, Button, FormControl, FormLabel, FormHelperText } from '@mui/material';
 
 const CreatePost = ({ onPostCreated }) => {
     const [content, setContent] = useState('');
     const [video, setVideo] = useState(null);
     const [trailer, setTrailer] = useState(null);
     const [castAndCrew, setCastAndCrew] = useState([{ name: '', role: '' }]);
+    const [errors, setErrors] = useState({});
     const cloudFrontUrl = process.env.REACT_APP_CLOUDFRONT_URL;
 
     const sanitizeFilename = (filename) => {
         return filename.replace(/\s+/g, '_');
-    };
-
-    const handleVideoChange = (e) => {
-        setVideo(e.target.files[0]);
-    };
-
-    const handleTrailerChange = (e) => {
-        setTrailer(e.target.files[0]);
     };
 
     const handleInputChange = (index, event) => {
@@ -36,8 +31,31 @@ const CreatePost = ({ onPostCreated }) => {
         setCastAndCrew(values);
     };
 
+    // Dropzone hooks for video and trailer
+    const { getRootProps: getVideoRootProps, getInputProps: getVideoInputProps } = useDropzone({
+        accept: 'video/*',
+        onDrop: acceptedFiles => setVideo(acceptedFiles[0]),
+    });
+
+    const { getRootProps: getTrailerRootProps, getInputProps: getTrailerInputProps } = useDropzone({
+        accept: 'video/*',
+        onDrop: acceptedFiles => setTrailer(acceptedFiles[0]),
+    });
+
+    const validateForm = () => {
+        let tempErrors = {};
+        tempErrors.content = content ? '' : 'Title is required.';
+        tempErrors.video = video ? '' : 'Movie file is required.';
+        tempErrors.trailer = trailer ? '' : 'Trailer file is required.';
+        tempErrors.castAndCrew = castAndCrew.some(item => item.name && item.role) ? '' : 'At least one cast/crew member is required.';
+
+        setErrors(tempErrors);
+        return Object.values(tempErrors).every(x => x === '');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
     
         let videoUrl = null;
         let trailerUrl = null;
@@ -75,7 +93,7 @@ const CreatePost = ({ onPostCreated }) => {
             const trailerKey = await uploadToS3(trailer, 'trailer');
             trailerUrl = `${cloudFrontUrl}/trailers/${trailerKey}`;
         }
-        console.log('Cast and Crew before submitting:', castAndCrew);
+        
         const postData = {
             content,
             video_url: videoUrl,
@@ -98,59 +116,86 @@ const CreatePost = ({ onPostCreated }) => {
     };
 
     return (
-        <div style={{ margin: '20px' }}>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '10px' }}>
-                    <textarea
+        <div style={{ margin: '20px', color: 'white' }}>
+            <form onSubmit={handleSubmit} style={{ backgroundColor: '#333', padding: '20px', borderRadius: '10px' }}>
+                <FormControl fullWidth error={!!errors.content} style={{ marginBottom: '20px' }}>
+                    <FormLabel style={{ marginBottom: '10px' }}>Title</FormLabel>
+                    <TextField
+                        variant="outlined"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        required
                         placeholder="Enter title"
-                        style={{ width: '100%', height: '100px' }}
+                        InputProps={{
+                            style: { 
+                                height: '50px',
+                            },
+                        }}
                     />
+                    <FormHelperText>{errors.content}</FormHelperText>
+                </FormControl>
+
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <FormControl fullWidth error={!!errors.video} style={{ marginRight: '10px' }}>
+                        <FormLabel style={{ marginBottom: '10px' }}>Movie</FormLabel>
+                        <div {...getVideoRootProps()} style={{ padding: '20px', border: '2px dashed #555', cursor: 'pointer' }}>
+                            <input {...getVideoInputProps()} />
+                            <p>{video ? `${video.name}` : 'Drag and drop, or click to browse'}</p>
+                        </div>
+                        <FormHelperText>{errors.video}</FormHelperText>
+                    </FormControl>
+
+                    <FormControl fullWidth error={!!errors.trailer}>
+                        <FormLabel style={{ marginBottom: '10px' }}>Trailer</FormLabel>
+                        <div {...getTrailerRootProps()} style={{ padding: '20px', border: '2px dashed #555', cursor: 'pointer' }}>
+                            <input {...getTrailerInputProps()} />
+                            <p>{trailer ? `${trailer.name}` : 'Drag and drop, or click to browse'}</p>
+                        </div>
+                        <FormHelperText>{errors.trailer}</FormHelperText>
+                    </FormControl>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="file"
-                        accept="video/*"
-                        onChange={handleVideoChange}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="file"
-                        accept="video/*"
-                        onChange={handleTrailerChange}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                {console.log('Rendering Cast and Crew:', castAndCrew)} {/* Debug log */}
+
+                <FormControl fullWidth error={!!errors.castAndCrew} style={{ marginBottom: '20px' }}>
+                    <FormLabel style={{ marginBottom: '10px' }}>Cast & Crew</FormLabel>
                     {castAndCrew.map((inputField, index) => (
-                        <div key={index}>
-                            <input
-                                type="text"
+                        <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <TextField
                                 name="name"
                                 value={inputField.name}
                                 onChange={event => handleInputChange(index, event)}
                                 placeholder="Cast/Crew Name"
+                                style={{ marginRight: '10px' }}
+                                InputProps={{
+                                    style: { 
+                                        height: '50px',
+                                    },
+                                }}
                             />
-                            <input
-                                type="text"
+                            <TextField
                                 name="role"
                                 value={inputField.role}
                                 onChange={event => handleInputChange(index, event)}
                                 placeholder="Role"
+                                style={{ marginRight: '10px' }}
+                                InputProps={{
+                                    style: { 
+                                        height: '50px',
+                                    },
+                                }}
                             />
-                            <button type="button" onClick={() => handleRemoveFields(index)}>
+                            <Button variant="contained" color="secondary" onClick={() => handleRemoveFields(index)}>
                                 Remove
-                            </button>
+                            </Button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => handleAddFields()}>
-                        Add Cast/Crew
-                    </button>
-                </div>
-                <button type="submit">Post</button>
+                    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                        <Button variant="contained" color="primary" onClick={() => handleAddFields()}>
+                            Add Cast/Crew
+                        </Button>
+                    </div>
+                    <FormHelperText>{errors.castAndCrew}</FormHelperText>
+                </FormControl>
+
+                <Button type="submit" variant="contained" color="primary">Post</Button>
             </form>
         </div>
     );

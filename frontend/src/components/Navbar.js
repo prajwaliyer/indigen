@@ -153,18 +153,18 @@ function Navbar() {
           </Box>
 
           {/* Desktop view */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 1.375 }}>
             <Link to="/">
-              <img
-                src={indigenLogo}
-                alt="Indigen Logo"
-                style={{ height: '50px' }}
+              <img 
+                src={indigenLogo} 
+                alt="Indigen Logo" 
+                style={{ height: '50px' }} 
               />
             </Link>
           </Box>
-          
-          <Box sx={{ flexGrow: 1, justifyContent: 'center', display: { xs: 'none', md: 'flex' } }}>
-            {isAuthenticated ? authLinks() : guestLinks()}
+
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 2, justifyContent: 'flex-start' }}>
+              {isAuthenticated ? authLinks() : guestLinks()}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

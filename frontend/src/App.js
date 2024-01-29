@@ -34,6 +34,8 @@ const ThemedApp = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/discover" element={<Navigate to="/" />} />
+              <Route path="/trending" element={<Navigate to="/" />} />
               <Route path="/create" element={<CreatePost />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
