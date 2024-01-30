@@ -10,7 +10,6 @@ const Home = () => {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/users/list-posts/');
-                console.log(response.data);
                 setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -25,12 +24,24 @@ const Home = () => {
             {posts.map(post => (
                 <VideoCard
                     key={post.id}
-                    videoKey={post.video_url.split('/').pop()}
+                    postId={post.id} // Pass post ID
                     title={post.content}
                 />
             ))}
         </div>
     );
+
+    // return (
+    //     <div className="videos-container">
+    //         {posts.map(post => (
+    //             <VideoCard
+    //                 key={post.id}
+    //                 videoKey={post.video_url.split('/').pop()}
+    //                 title={post.content}
+    //             />
+    //         ))}
+    //     </div>
+    // );
 };
 
 export default Home;

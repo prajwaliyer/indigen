@@ -16,6 +16,8 @@ urlpatterns = [
     path('users/<int:user_id>/following/', user_views.get_following, name='get_following'),
     path('get-presigned-url/', user_views.get_presigned_url, name='get_presigned_url'),
     path('users/list-posts/', user_views.list_posts, name='list_posts'),
+    path('users/list-users/', user_views.list_users, name='list_users'),
+    path('users/posts/<int:post_id>/', user_views.get_movie_detail, name='get_movie_detail'),
 ]
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

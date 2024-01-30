@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .models import Post, UserAccount
 from rest_framework.permissions import AllowAny
 import boto3
+from django.core.mail import send_mail
 from django.conf import settings
 from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 import uuid
@@ -28,9 +29,37 @@ def get_user_posts(request, user_id):
 def create_post(request):
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(author=request.user)
+        post = serializer.save(author=request.user)
+
+        # Process cast and crew emails
+        for member in post.cast_and_crew:
+            email = member.get('email')
+            if email:
+                # Check if email belongs to a registered user
+                user_exists = UserAccount.objects.filter(email=email).exists()
+                if not user_exists:
+                    # Send email notification to the unregistered user
+                    send_mail(
+                        'You\'ve been tagged in a post on Indigen',
+                        f'Hi, you have been tagged in a post titled "{post.content}". Visit our site to check it out!',
+                        settings.EMAIL_HOST_USER,
+                        [email],
+                        fail_silently=False,
+                    )
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_movie_detail(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    except Post.DoesNotExist:
+        return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -63,6 +92,13 @@ def get_presigned_url(request):
 def list_posts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_users(request):
+    users = UserAccount.objects.all()
+    serializer = UserCreateSerializer(users, many=True)
     return Response(serializer.data)
     
 @api_view(['POST'])

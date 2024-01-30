@@ -11,6 +11,7 @@ import UserPage from './containers/UserPage/UserPage';
 import FollowersList from './containers/UserPage/FollowersList';
 import FollowingList from './containers/UserPage/FollowingList';
 import VideoPlayer from './components/VideoPlayer';
+import MovieDetail from './components/MovieDetail';
 
 import Layout from './hocs/Layout';
 
@@ -36,7 +37,7 @@ const ThemedApp = () => {
               <Route path="/" element={<Home />} />
               <Route path="/discover" element={<Navigate to="/" />} />
               <Route path="/trending" element={<Navigate to="/" />} />
-              <Route path="/create" element={<CreatePost />} />
+              <Route path="/create" element={<Create />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/reset-password" element={<ResetPassword />} />
@@ -48,6 +49,7 @@ const ThemedApp = () => {
               <Route path="/users/:userId/following" element={<FollowingList />} />
               <Route path="/watch/video/:videoKey" element={<VideoPlayer />} />
               <Route path="/watch/trailer/:videoKey" element={<VideoPlayer />} />
+              <Route path="/movie/:postId" element={<MovieDetail />} />
             </Routes>
           </Layout>    
         </Router>

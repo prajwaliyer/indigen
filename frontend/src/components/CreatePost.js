@@ -7,7 +7,7 @@ const CreatePost = ({ onPostCreated }) => {
     const [content, setContent] = useState('');
     const [video, setVideo] = useState(null);
     const [trailer, setTrailer] = useState(null);
-    const [castAndCrew, setCastAndCrew] = useState([{ name: '', role: '' }]);
+    const [castAndCrew, setCastAndCrew] = useState([{ name: '', email: '', role: '' }]);
     const [errors, setErrors] = useState({});
     const cloudFrontUrl = process.env.REACT_APP_CLOUDFRONT_URL;
 
@@ -169,6 +169,15 @@ const CreatePost = ({ onPostCreated }) => {
                                         height: '50px',
                                     },
                                 }}
+                            />
+                            <TextField
+                                name="email"
+                                value={inputField.email}
+                                onChange={event => handleInputChange(index, event)}
+                                placeholder="Email"
+                                type="email"
+                                style={{ marginRight: '10px' }}
+                                InputProps={{ style: { height: '50px' }}}
                             />
                             <TextField
                                 name="role"
