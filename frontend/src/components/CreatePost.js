@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { TextField, Button, FormControl, FormLabel, FormHelperText } from '@mui/material';
 
-const CreatePost = ({ onPostCreated }) => {
+const CreatePost = () => {
     const [content, setContent] = useState('');
     const [video, setVideo] = useState(null);
     const [trailer, setTrailer] = useState(null);
@@ -112,12 +112,11 @@ const CreatePost = ({ onPostCreated }) => {
         setVideo(null);
         setTrailer(null);
         setCastAndCrew([{ name: '', role: '' }]);
-        onPostCreated(postResponse.data);
     };
 
     return (
         <div style={{ margin: '20px', color: 'white' }}>
-            <form onSubmit={handleSubmit} style={{ backgroundColor: '#333', padding: '20px', borderRadius: '10px' }}>
+            <form onSubmit={handleSubmit} style={{ backgroundColor: '#232D3F', padding: '20px', borderRadius: '10px' }}>
                 <FormControl fullWidth error={!!errors.content} style={{ marginBottom: '20px' }}>
                     <FormLabel style={{ marginBottom: '10px' }}>Title</FormLabel>
                     <TextField

@@ -1,0 +1,81 @@
+.videoCard {
+    width: 320px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: 16 / 9;
+    }
+
+    .videoCaption {
+        padding: 8px;
+        background-color: #f5f5f5;
+
+        p {
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+        }
+    }
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+
+.video-js-container {
+    width: 640px; /* Width of the video player */
+    height: 360px; /* Height of the video player */
+    overflow: hidden; /* Ensures anything outside the bounds is not shown */
+    position: relative;
+    margin-right: 20px;
+}
+
+.video-js {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.shorts-player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.shorts-button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .video-js-container {
+        max-width: 100%;
+        height: auto;
+        padding-top: 56.25%;
+    }
+
+    .shorts-player-container {
+        flex-direction: column;
+    }
+
+    .shorts-button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}

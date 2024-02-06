@@ -1,0 +1,73 @@
+.videos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, max-content));
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.video-card {
+    width: 320px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: 16 / 9;
+    }
+
+    .video-caption {
+        padding: 8px;
+        background-color: #f5f5f5;
+
+        p {
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+        }
+    }
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.shorts-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; // Adds space between video player and buttons
+    margin: 0 auto;
+    padding: 20px;
+    
+    @media (max-width: 768px) { // Adjust this value based on your mobile breakpoint
+        flex-direction: column;
+    }
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // Align buttons to the start (left)
+    justify-content: center;
+    
+    @media (max-width: 768px) { // Mobile view adjustments
+        align-items: center;
+        width: 100%;
+        margin-top: 20px; // Adds space between video player and buttons
+    }
+}
+
+// Update your .video-js-container class to have a max-width and adjust accordingly
+.video-js-container {
+    max-width: 640px; // Max width of the video player
+    margin-right: 20px;
+    // Your existing styles...
+}

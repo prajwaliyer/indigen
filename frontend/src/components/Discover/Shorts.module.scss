@@ -1,0 +1,102 @@
+.videoJs {
+    width: 100% !important;
+    height: 85vh !important;
+}
+
+.videoContainer {
+    flex-grow: 3;
+    padding-right: 20px;
+}
+
+.videoJsContainerShorts {
+    width: 100%;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.shortsContainer {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+}
+  
+.shortsFlexContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 85vh;
+}
+
+.detailsContainer {
+    flex: 1;
+    height: 100%;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content {
+    flex-grow: 1;
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid #666;
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
+.button {
+    flex-basis: 50%;
+    border-radius: 7px;
+    &:first-child {
+        margin-right: 5px;
+    }
+    &:last-child {
+        margin-left: 5px;
+    }
+}
+
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .shortsFlexContainer {
+        flex-direction: column;
+        height: auto;
+    }
+    .videoContainer {
+        padding-right: 0;
+        padding-left: 0;
+        padding-bottom: 10px;
+        width: 100%;
+    }
+    
+    .detailsContainer {
+        padding-right: 0;
+        padding-left: 0;
+        padding-top:10px;
+        width: 100%;
+    }
+    .videoJsContainerShorts {
+        padding-top: 56.25%;
+        height: 0;
+        position: relative;
+    }
+    
+    .videoJs {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+}

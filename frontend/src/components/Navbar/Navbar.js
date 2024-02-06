@@ -3,16 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import indigenLogo from '../assets/indigen_logo.png';
+import indigenLogo from '../../assets/indigen_logo.png';
 
 import { Link } from 'react-router-dom';
-import { logout } from '../reducers/authSlice';
+import { logout } from '../../reducers/authSlice';
 
-import { toggleDarkMode } from '../reducers/theme';
+import { toggleDarkMode } from '../../reducers/theme';
 import { useTheme } from '@mui/material/styles';
 
-const guestPages = ['Discover', 'Trending', 'DarkMode'];
-const authPages = ['Discover', 'Trending', 'Create'];
+const guestPages = ['Discover', 'Trending'];
+const authPages = ['Discover', 'Trending'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function Navbar() {
@@ -24,6 +24,7 @@ function Navbar() {
   const [openNavMenu, setOpenNavMenu] = React.useState(null);
   const [openUserMenu, setOpenUserMenu] = React.useState(null);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const userId = useSelector((state) => state.auth.user?.id);
 
   const authLinks = () => (
     authPages.map((page) => (
@@ -38,8 +39,10 @@ function Navbar() {
     ))
   );
 
-    const authMenuLinks = () => (
-      authPages.map((page) => (
+    const authMenuLinks = () => {
+      const pages = isAuthenticated ? [...authPages, 'Create'] : authPages;
+
+      return pages.map((page) => (
         <MenuItem 
           key={page} 
           component={Link}
@@ -49,7 +52,7 @@ function Navbar() {
           <Typography textAlign="center">{page}</Typography>
         </MenuItem>
       ))
-    );
+    };
 
   const guestLinks = () => (
     guestPages.map((page) => (
@@ -58,7 +61,6 @@ function Navbar() {
         component={Link}
         to={`/${page.toLowerCase()}`}
         sx={{ my: 2, color: 'white', display: 'block' }}
-        onClick={page === 'DarkMode' ? handleToggleDarkMode : undefined}
       >
         {page}
       </Button>
@@ -117,6 +119,7 @@ function Navbar() {
               aria-haspopup="true"
               onClick={handleToggleNavMenu}
               color="inherit"
+              sx={{ marginLeft: isAuthenticated ? 0 : 'auto' }}
             >
               <MenuIcon />
             </IconButton>
@@ -142,7 +145,7 @@ function Navbar() {
             </Menu>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, justifyContent: 'center' }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, justifyContent: 'center', ml: 11 }}>
             <Link to="/">
               <img
                 src={indigenLogo}
@@ -153,7 +156,7 @@ function Navbar() {
           </Box>
 
           {/* Desktop view */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 1.375 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 1.5 }}>
             <Link to="/">
               <img 
                 src={indigenLogo} 
@@ -163,43 +166,62 @@ function Navbar() {
             </Link>
           </Box>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 2, justifyContent: 'flex-start' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 1.575, justifyContent: 'flex-start' }}>
               {isAuthenticated ? authLinks() : guestLinks()}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleToggleUserMenu} sx={{ p: 0, fontSize: 'large' }}>
-                  <AccountCircleOutlinedIcon fontSize="large" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={openUserMenu}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(openUserMenu)}
-              onClose={handleToggleUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem 
-                  key={setting} 
+          <Box sx={{ flexGrow: 0, width: 150, display: 'flex', justifyContent: 'flex-end' }}>
+            {isAuthenticated ? (
+              <>
+                <Button
                   component={Link}
-                  to={`/${setting.toLowerCase()}`}
-                  onClick={setting === 'Logout' ? handleLogout : handleToggleUserMenu}
+                  to="/create"
+                  sx={{ my: 2, color: 'white', display: { xs: 'none', md: 'block' }, mr: 2 }}
                 >
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+                  Create
+                </Button>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleToggleUserMenu} sx={{ p: 0, fontSize: 'large' }}>
+                      <AccountCircleOutlinedIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={openUserMenu}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(openUserMenu)}
+                  onClose={handleToggleUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem 
+                      key={setting}
+                      component={Link}
+                      to={setting === 'Profile' ? `/users/${userId}` : `/${setting.toLowerCase()}`}
+                      onClick={setting === 'Logout' ? handleLogout : handleToggleUserMenu}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            ) : (
+              <Button
+                component={Link}
+                to="/login"
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Login
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

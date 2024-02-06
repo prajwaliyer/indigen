@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import CreatePost from '../../components/CreatePost';
-import PostsList from '../../components/PostsList';
 import axios from 'axios';
+import VideoCard from '../VideoCard/VideoCard';
+import styles from './UserPage.module.scss';
 
 const UserPage = () => {
     
@@ -82,9 +82,15 @@ const UserPage = () => {
                 </button>
             )}
 
-            {isCurrentUser && <CreatePost onPostCreated={handlePostCreated} />}
-            <PostsList posts={posts} />
-
+            <div className={styles.videosContainer}>
+                {posts.map(post => (
+                    <VideoCard
+                        key={post.id}
+                        postId={post.id}
+                        title={post.content}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

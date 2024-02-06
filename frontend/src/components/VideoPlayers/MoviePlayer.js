@@ -16,36 +16,34 @@ const VideoPlayer = () => {
     }, []);
 
     useEffect(() => {
-        const controlBarOptions = {
-            children: [
-                'playToggle',
-                'volumePanel',
-                'currentTimeDisplay',
-                'timeDivider',
-                'durationDisplay',
-                'progressControl',
-                'liveDisplay',
-                'seekToLive',
-                'customControlSpacer',
-                'playbackRateMenuButton',
-                'chaptersButton',
-                'descriptionsButton',
-                'subsCapsButton',
-                'audioTrackButton',
-                'fullscreenToggle'
-            ]
-        };
-
         const videoType = location.pathname.includes('/trailer/') ? 'trailers' : 'videos';
         if (isComponentMounted && videoNode.current) {
             player.current = videojs(videoNode.current, {
                 controls: true,
-                controlBar: controlBarOptions,
                 playbackRates: [0.25, 0.5, 1, 1.25, 1.5, 1.75, 2],
                 sources: [{
                     src: `${cloudFrontUrl}/${videoType}/${videoKey}`,
                     type: 'video/mp4'
-                }]
+                }],
+                controlBar: {
+                    children: [
+                        'playToggle',
+                        'volumePanel',
+                        'currentTimeDisplay',
+                        'timeDivider',
+                        'durationDisplay',
+                        'progressControl',
+                        'liveDisplay',
+                        'seekToLive',
+                        'customControlSpacer',
+                        'playbackRateMenuButton',
+                        'chaptersButton',
+                        'descriptionsButton',
+                        'subsCapsButton',
+                        'audioTrackButton',
+                        'fullscreenToggle'
+                    ]
+                }
             });
         }
 
@@ -67,8 +65,10 @@ const VideoPlayer = () => {
     }, []);
 
     return (
-        <div data-vjs-player>
-            <video ref={videoNode} className="video-js vjs-big-play-centered"></video>
+        <div className="video-js-container">
+            <div data-vjs-player>
+                <video ref={videoNode} className="video-js vjs-big-play-centered"></video>
+            </div>
         </div>
     );
 };
