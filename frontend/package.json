@@ -22,6 +22,7 @@
     "react-router-dom": "^6.21.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
+    "rimraf": "^5.0.5",
     "redux": "^5.0.0",
     "sass": "^1.70.0",
     "video.js": "^8.9.0",
@@ -50,8 +51,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "rimraf": "^5.0.5"
   }
 }
