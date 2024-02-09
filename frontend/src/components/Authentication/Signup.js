@@ -138,14 +138,14 @@ const Signup = () => {
           >
             Register
           </Button>
-          <Button
+          {/* <Button
             fullWidth
             variant="outlined"
             sx={{ mt: 3, mb: 2, borderColor: 'red', color: 'red' }}
             onClick={() => {}}
           >
             Signup with Google
-          </Button>
+          </Button> */}
           <Box textAlign="center" sx={{ mt: 2 }}>
             <Typography variant="body2" color="white">
               Already have an account? <Link to="/login" style={{ color: '#1976d2' }}>Sign In</Link>

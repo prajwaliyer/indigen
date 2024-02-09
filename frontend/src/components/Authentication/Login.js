@@ -110,7 +110,7 @@ const Login = () => {
             Sign In
           </Button>
           <Typography variant="body2" color="white" align="center">
-            New user?<MuiLink component={Link} to="/signup" underline="hover" sx={{ color: '#4fc3f7' }}>Create Account</MuiLink>
+            New user? <MuiLink component={Link} to="/signup" underline="hover" sx={{ color: '#4fc3f7' }}>Create Account</MuiLink>
           </Typography>
           <Typography variant="body2" color="white" align="center">
             Forgot your password? <MuiLink component={Link} to="/reset-password" underline="hover" sx={{ color: '#4fc3f7' }}>Reset Password</MuiLink>

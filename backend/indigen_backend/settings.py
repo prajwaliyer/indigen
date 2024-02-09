@@ -102,8 +102,8 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME'),  
         'USER': os.environ.get('DB_USER'),    
         'PASSWORD': os.environ.get('DB_PASSWORD'),  
-        'HOST': os.environ.get('DB_HOST', 'localhost'),   
-        'PORT': os.environ.get('DB_PORT', '5432'),  
+        'HOST': os.environ.get('DB_HOST'),   
+        'PORT': os.environ.get('DB_PORT'),  
     }
 }
 
@@ -175,7 +175,7 @@ SIMPLE_JWT = {
    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-DOMAIN = 'localhost:8000'
+DOMAIN = 'indigen-prod-39be9e795e98.herokuapp.com' # localhost:8000
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
@@ -188,7 +188,7 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [os.environ.get('REACT_APP_API_URL')], # http://localhost:8000
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserCreateSerializer',
         'user': 'users.serializers.UserCreateSerializer',
