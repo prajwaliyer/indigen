@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "rimraf ../backend/build && react-scripts --openssl-legacy-provider build && mv build ../backend/",
+    "build": "rimraf ../backend/build && react-scripts build && mv build ../backend/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
