@@ -1,10 +1,10 @@
 .videoCard {
     width: 320px;
     margin: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #232D3F;
     border-radius: 10px;
     overflow: hidden;
-    background-color: #fff;
+    background-color: #232D3F;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     img {
@@ -16,12 +16,13 @@
 
     .videoCaption {
         padding: 8px;
-        background-color: #f5f5f5;
+        background-color: #232D3F;
 
         p {
             margin: 0;
-            color: #333;
+            color: #f5f5f5;
             font-size: 14px;
+            font-family: inter;
         }
     }
 

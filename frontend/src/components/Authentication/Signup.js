@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signup } from '../../reducers/authSlice';
-import axios from 'axios';
+import { Container, TextField, Button, Typography, Paper, Box } from '@mui/material';
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -28,91 +28,132 @@ const Signup = () => {
     }
   };
 
-  const continueWithGoogle = async () => {
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}`)
-      window.location.replace(res.data.authorization_url);
-    } catch (err) {
-
-    }
-  };
-
   if (isAuthenticated) {
-    return <Navigate to='/' />
+    return <Navigate to="/" />;
   }
   if (accountCreated) {
-    return <Navigate to='/login' />
+    return <Navigate to="/login" />;
   }
 
   return (
-    <div className='container mt-5'>
-      <h2>Sign Up</h2>
-      <p>Create your Account</p>
-      <form onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            className='form-control'
-            type='text'
-            placeholder='First Name'
-            name='first_name'
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: '15px', backgroundColor: '#232D3F' }}>
+        <Typography component="h1" variant="h5" color="white">
+          Sign Up
+        </Typography>
+        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="first_name"
+            label="First Name"
+            name="first_name"
+            autoComplete="fname"
+            autoFocus
             value={first_name}
-            onChange={e => onChange(e)}
-            required
+            onChange={onChange}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control'
-            type='text'
-            placeholder='Last Name'
-            name='last_name'
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="last_name"
+            label="Last Name"
+            name="last_name"
+            autoComplete="lname"
             value={last_name}
-            onChange={e => onChange(e)}
-            required
+            onChange={onChange}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control'
-            type='email'
-            placeholder='Email'
-            name='email'
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
             value={email}
-            onChange={e => onChange(e)}
-            required
+            onChange={onChange}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control'
-            type='password'
-            placeholder='Password'
-            name='password'
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="new-password"
             value={password}
-            onChange={e => onChange(e)}
-            minLength='6'
-            required
+            onChange={onChange}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control'
-            type='password'
-            placeholder='Confirm Password'
-            name='re_password'
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="re_password"
+            label="Confirm Password"
+            type="password"
+            id="re_password"
+            autoComplete="new-password"
             value={re_password}
-            onChange={e => onChange(e)}
-            minLength='6'
-            required
+            onChange={onChange}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
           />
-        </div>
-        <button className='btn btn-primary' type='submit'>Register</button>
-      </form>
-      <button className='btn btn-danger mt-3' onClick={continueWithGoogle}>Signup with Google</button>
-      <p className='mt-3'>
-        Already have an account? <Link to='/login'>Sign In</Link>
-      </p>
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Register
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 3, mb: 2, borderColor: 'red', color: 'red' }}
+            onClick={() => {}}
+          >
+            Signup with Google
+          </Button>
+          <Box textAlign="center" sx={{ mt: 2 }}>
+            <Typography variant="body2" color="white">
+              Already have an account? <Link to="/login" style={{ color: '#1976d2' }}>Sign In</Link>
+            </Typography>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

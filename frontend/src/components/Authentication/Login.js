@@ -1,82 +1,120 @@
-import React, { useState } from 'react'
-import { Link, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../reducers/authSlice';
 import axios from 'axios';
+import { Button, TextField, Typography, Box, Container, Paper, Link as MuiLink, Alert } from '@mui/material';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [formData, setFormData] = useState({
-    email:'',
-    password:''
+    email: '',
+    password: ''
+  });
+
+  const [errorMessages, setErrorMessages] = useState({
+    email: '',
+    password: '',
+    general: ''
   });
 
   const { email, password } = formData;
   
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
+    setErrorMessages({ email: '', password: '', general: '' }); // Reset error messages
 
-    dispatch(login({ email, password }));
-  };
-
-  const continueWithGoogle = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}`)
-      window.location.replace(res.data.authorization_url);
-    } catch (err) {
-
+      await dispatch(login({ email, password })).unwrap();
+      navigate('/'); // Navigate to home page on successful login
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Set error messages based on the response from the server
+        setErrorMessages(prev => ({
+          ...prev,
+          general: 'Invalid credentials. Please try again.'
+        }));
+      } else {
+        setErrorMessages(prev => ({
+          ...prev,
+          general: 'Invalid credentials. Please try again.'
+        }));
+      }
     }
   };
 
   if (isAuthenticated) {
-    return <Navigate to='/' />
+    return <Navigate to="/" />;
   }
 
   return (
-    <div className='container mt-5'>
-            <h1>Sign In</h1>
-            <p>Sign into your Account</p>
-            <form onSubmit={e => onSubmit(e)}>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='email'
-                        placeholder='Email'
-                        name='email'
-                        value={email}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='password'
-                        placeholder='Password'
-                        name='password'
-                        value={password}
-                        onChange={e => onChange(e)}
-                        minLength='6'
-                        required
-                  />
-                </div>
-                <br />
-                <button className='btn btn-primary' type='submit'>Login</button>
-            </form>
-            <button className='btn btn-danger mt-3' onClick={continueWithGoogle}>Login with Google</button>
-
-            <p className='mt-3'>
-                Don't have an account? <Link to='/signup'>Sign Up</Link>
-            </p>
-
-            <p className='mt-3'>
-                Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
-            </p>
-        </div>
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: '15px', backgroundColor: '#232D3F' }}>
+        <Typography component="h1" variant="h5" color="white">
+          Sign In
+        </Typography>
+        {errorMessages.general && (
+          <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+            {errorMessages.general}
+          </Alert>
+        )}
+        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={onChange}
+            variant="outlined"
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
+            error={!!errorMessages.email}
+            helperText={errorMessages.email}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={onChange}
+            variant="outlined"
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
+            error={!!errorMessages.password}
+            helperText={errorMessages.password}
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            Sign In
+          </Button>
+          <Typography variant="body2" color="white" align="center">
+            Forgot your password? <MuiLink component={Link} to="/reset-password" underline="hover" sx={{ color: '#4fc3f7' }}>Reset Password</MuiLink>
+          </Typography>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

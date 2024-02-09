@@ -1,6 +1,6 @@
 .videoJs {
     width: 100% !important;
-    height: 85vh !important;
+    height: 84vh !important;
 }
 
 .videoContainer {
@@ -13,7 +13,6 @@
     position: relative;
     border-radius: 15px;
     overflow: hidden;
-    border-radius: 15px;
 }
 
 .shortsContainer {
@@ -27,7 +26,7 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    height: 85vh;
+    height: 84vh;
 }
 
 .detailsContainer {
@@ -43,6 +42,11 @@
 
 .content {
     flex-grow: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-bottom: 10px; /* Add some space above the buttons */
+    padding-right: 10px; /* Adjust if you need padding inside the scrollable area */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
 }
 
 .buttonsContainer {
@@ -70,7 +74,7 @@
 @media (max-width: 768px) {
     .shortsFlexContainer {
         flex-direction: column;
-        height: auto;
+        height: 55vh;
     }
     .videoContainer {
         padding-right: 0;
@@ -97,6 +101,15 @@
         left: 0;
         width: 100% !important;
         height: 100% !important;
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow-y: auto; /* Enable vertical scrolling */
+        margin-bottom: 10px; /* Add some space above the buttons */
+        padding-right: 10px; /* Adjust if you need padding inside the scrollable area */
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none; /* Firefox */
     }
     
 }

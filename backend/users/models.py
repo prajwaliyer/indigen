@@ -41,11 +41,15 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 class Post(models.Model):
     author = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='posts')
-    content = models.TextField()
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
     video_url = models.URLField(max_length=1024, null=True, blank=True)
     trailer_url = models.URLField(max_length=1024, null=True, blank=True)
+    thumbnail_url = models.URLField(max_length=1024, null=True, blank=True)
     cast_and_crew = models.JSONField(default=list)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    views = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.content[:50]
+        return self.title[:50]

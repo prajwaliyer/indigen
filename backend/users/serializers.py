@@ -12,8 +12,11 @@ class UserCreateSerializer(UserCreateSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.id')
+    author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'content', 'video_url', 'trailer_url', 'cast_and_crew', 'created_at']
+        fields = ['id', 'author', 'author_name', 'title', 'description', 'video_url', 'trailer_url', 'thumbnail_url', 'cast_and_crew', 'location', 'views', 'created_at']
 
+    def get_author_name(self, obj):
+        return f"{obj.author.first_name} {obj.author.last_name}"

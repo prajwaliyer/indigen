@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import { useParams, useLocation } from 'react-router-dom';
+import styles from './VideoPlayers.module.scss';
 
 const VideoPlayer = () => {
     const { videoKey } = useParams();
@@ -60,14 +61,10 @@ const VideoPlayer = () => {
         };
     }, [isComponentMounted, videoKey, location.pathname]);
 
-    useEffect(() => {
-        console.log('Video node ref:', videoNode.current);
-    }, []);
-
     return (
-        <div className="video-js-container">
+        <div className={styles.videoJsContainer}>
             <div data-vjs-player>
-                <video ref={videoNode} className="video-js vjs-big-play-centered"></video>
+                <video ref={videoNode} className={`${styles.videoJs} video-js vjs-big-play-centered`}></video>
             </div>
         </div>
     );

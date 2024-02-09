@@ -4,17 +4,25 @@ from .serializers import UserCreateSerializer, PostSerializer
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from .models import Post, UserAccount
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 import boto3
 from django.core.mail import send_mail
 from django.conf import settings
 from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 import uuid
+from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def users_view(request):
     users = get_user_model().objects.all()
     serializer = UserCreateSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_user_details(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    serializer = UserCreateSerializer(user)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -27,6 +35,11 @@ def get_user_posts(request, user_id):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def create_post(request):
+    # 3 post limit for closed beta
+    user_posts_count = Post.objects.filter(author=request.user).count()
+    if user_posts_count >= 3:
+        return Response({"message": "Users are limited to 3 posts each in the closed beta."}, status=status.HTTP_400_BAD_REQUEST)
+    
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
         post = serializer.save(author=request.user)
@@ -41,7 +54,7 @@ def create_post(request):
                     # Send email notification to the unregistered user
                     send_mail(
                         'You\'ve been tagged in a post on Indigen',
-                        f'Hi, you have been tagged in a post titled "{post.content}". Visit our site to check it out!',
+                        f'Hi, you have been tagged in a post titled "{post.title}". Visit our site to check it out!',
                         settings.EMAIL_HOST_USER,
                         [email],
                         fail_silently=False,
@@ -60,7 +73,6 @@ def get_movie_detail(request, post_id):
     except Post.DoesNotExist:
         return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_presigned_url(request):
@@ -71,12 +83,15 @@ def get_presigned_url(request):
         region_name=settings.AWS_S3_REGION_NAME
     )
 
-    file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
-    video_type = request.GET.get('video_type', 'video')  # Default to 'video' if not specified
+    upload_type = request.GET.get('upload_type', 'video')  # Default to 'video' if not specified
     unique_filename = f"{uuid.uuid4()}"
 
-    key_prefix = 'trailers/' if video_type == 'trailer' else 'videos/'
+    key_prefix = 'videos/'
+    if upload_type == 'trailer':
+        key_prefix = 'trailers/'
+    elif upload_type == 'thumbnail':
+        key_prefix = 'thumbnails/'
     try:
         presigned_url = s3_client.generate_presigned_url('put_object',
             Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
@@ -86,6 +101,17 @@ def get_presigned_url(request):
         return Response({'presigned_url': presigned_url})
     except NoCredentialsError:
         return Response({'error': 'Error generating presigned URL'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def increment_views(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user.id != post.author.id:
+        post.views += 1
+        post.save(update_fields=['views'])
+        return Response({'status': 'success', 'views': post.views})
+    else:
+        return Response({'status': 'no_change', 'message': 'Author views are not counted', 'views': post.views})
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])

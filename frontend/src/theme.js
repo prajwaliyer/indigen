@@ -22,6 +22,9 @@ const theme = (mode) => createTheme({
             secondary: {
                 main: '#19857b',
             },
+            tertiary: {
+                main: '#005B41',
+            },
             background: {
                 default: '#0F0F0F',
             },

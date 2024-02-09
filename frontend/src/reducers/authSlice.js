@@ -79,7 +79,6 @@ export const login = createAsyncThunk(
                 'Content-Type': 'application/json'
             }
         };
-        console.log("login thunk")
         const body = JSON.stringify({ email, password });
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/create/`, body, config);
@@ -128,7 +127,7 @@ export const verify = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
     'auth/resetPassword',
-    async (email, thunkAPI) => {
+    async ({ email }, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json'

@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import VideoPlayerShorts from './VideoPlayerShorts';
 import axios from 'axios';
-import { Button, Card, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardContent, Typography, Chip, Stack } from '@mui/material';
 import styles from './Shorts.module.scss';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { useTheme } from '@mui/material/styles';
 
 const ShortsPlayer = () => {
+    const theme = useTheme();
     const { postId } = useParams();
     const location = useLocation();
     const isDiscover = location.pathname.includes('/discover');
@@ -21,8 +23,9 @@ const ShortsPlayer = () => {
     useEffect(() => {
         const fetchMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/users/list-posts/');
-                setMovies(response.data);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/list-posts/`);
+                const sortedPosts = response.data.sort((a, b) => b.views - a.views);
+                setMovies(sortedPosts);
             } catch (error) {
                 console.error('Error fetching movies:', error);
             }
@@ -30,7 +33,7 @@ const ShortsPlayer = () => {
 
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/users/list-users/');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/list-users/`);
                 const emailToIdMap = {};
                 response.data.forEach(user => {
                     emailToIdMap[user.email] = user.id;
@@ -75,9 +78,32 @@ const ShortsPlayer = () => {
         }
     };
 
-    const handleViewMovie = () => {
-        navigate(`/movie/${movies[currentMovieIndex].id}`);
+    const handleViewMovie = async () => {
+        // Assuming movies[currentMovieIndex] is the current movie object
+        const movieId = movies[currentMovieIndex].id; // Correctly derive movieId from the current movie object
+    
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/posts/${movieId}/increment-views/`, {}, {
+                headers: {
+                    'Authorization': `JWT ${localStorage.getItem('access')}`
+                }
+            });
+            if (response.data.status === 'success') {
+                setMovies(prevMovies => prevMovies.map((movie, index) => {
+                    if (index === currentMovieIndex) {
+                        return { ...movie, views: response.data.views };
+                    }
+                    return movie;
+                }));
+            }
+        } catch (error) {
+            console.error('Error incrementing views:', error);
+        }
+    
+        // Adjusted to navigate using the video URL from the current movie object
+        navigate(`/watch/video/${movies[currentMovieIndex].video_url.split('/').pop()}`);
     };
+    
 
     return (
         <div className={styles.shortsContainer}>
@@ -90,36 +116,63 @@ const ShortsPlayer = () => {
                         <Card sx={{ minWidth: 275, backgroundColor: '#232D3F', color: 'white', height: '100%', borderRadius: '15px' }}>
                             <CardContent className={styles.cardContent}>
                                 <div className={styles.content}>
-                                <Typography variant="h5" component="div">
-                                    {movies[currentMovieIndex].content}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }}>
-                                    Cast & Crew
-                                </Typography>
-                                <ul>
-                                    {movies[currentMovieIndex].cast_and_crew.map((person, index) => (
-                                        <li key={index}>
-                                            {userEmailToIdMap[person.email] ? (
-                                                <Link to={`/users/${userEmailToIdMap[person.email]}`}>{person.name}</Link>
+                                    <Typography variant="h4" component="div">
+                                        {movies[currentMovieIndex].title}
+                                    </Typography>
+                                    
+                                    <Typography variant="body2" color="text.secondary">
+                                        By <Link to={`/users/${movies[currentMovieIndex].author}`} style={{ textDecoration: 'none' }}>
+                                            {movies[currentMovieIndex].author_name}
+                                        </Link>
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {movies[currentMovieIndex].views} movie views
+                                    </Typography>
+                                    <div style={{ marginLeft: 0, marginTop: '20px', marginBottom: '20px'  }}>
+                                        <Button 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            onClick={handleViewMovie} 
+                                            style={{ borderColor: 'white', color: 'white', margin: 0 }}
+                                            className={styles.button}
+                                        >
+                                            <PlayCircleIcon sx={{ marginRight: '7px' }}/>
+                                            Play Movie
+                                        </Button>
+                                    </div>
+                                    <Typography variant="body2">
+                                        {movies[currentMovieIndex].description}
+                                    </Typography>
+                                    <Typography sx={{ mt: 4, mb: 1.5 }}>
+                                        Cast & Crew
+                                    </Typography>
+                                    <Stack direction="row" flexWrap="wrap">
+                                        {movies[currentMovieIndex].cast_and_crew.map((person, index) => (
+                                            userEmailToIdMap[person.email] ? (
+                                                <Link to={`/users/${userEmailToIdMap[person.email]}`} key={index} style={{ textDecoration: 'none' }}>
+                                                    <div style={{ paddingLeft: '5px' }}>
+                                                        <Chip 
+                                                            label={`${person.role}: ${person.name}`}
+                                                            clickable
+                                                            variant="outlined"
+                                                            sx={{ mb: 1, color: '#1976d2' }}
+                                                        />
+                                                    </div>
+                                                </Link>
                                             ) : (
-                                                <span>{person.name}</span>
-                                            )}
-                                            {' - ' + person.role}
-                                        </li>
-                                    ))}
-                                </ul>
+                                                <div style={{ paddingLeft: '5px' }}>
+                                                    <Chip 
+                                                        key={index}
+                                                        label={`${person.role}: ${person.name}`}
+                                                        variant="outlined" 
+                                                        sx={{ mb: 1, color: 'grey' }}
+                                                    />
+                                                </div>
+                                            )
+                                        ))}
+                                    </Stack>
                                 </div>
                                 <div className={styles.buttonsContainer}>
-                                    {/* <Button 
-                                        variant="outlined" 
-                                        color="primary" 
-                                        onClick={handleViewMovie} 
-                                        style={{ borderColor: 'white', color: 'white' }}
-                                        className={styles.button}
-                                    >
-                                        <PlayCircleIcon sx={{ marginRight: '7px' }}/>
-                                        Play Movie
-                                    </Button> */}
                                     <Button 
                                         variant="outlined" 
                                         color="primary" 

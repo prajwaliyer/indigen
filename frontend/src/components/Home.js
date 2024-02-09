@@ -9,8 +9,9 @@ const Home = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/users/list-posts/');
-                setPosts(response.data);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/list-posts/`);
+                const sortedPosts = response.data.sort((a, b) => b.views - a.views);
+                setPosts(sortedPosts);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -25,7 +26,8 @@ const Home = () => {
                     <VideoCard
                         key={post.id}
                         postId={post.id} // Pass post ID
-                        title={post.content}
+                        title={post.title}
+                        thumbnailUrl={post.thumbnail_url}
                     />
                 ))}
             </div>

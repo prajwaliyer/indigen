@@ -1,48 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { resetPassword } from '../../reducers/authSlice';
+import { TextField, Button, Typography, Container, Paper, Box } from '@mui/material';
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
-
   const [requestSent, setRequestSent] = useState(false);
-  const [formData, setFormData] = useState({
-    email:''
-  });
+  const [email, setEmail] = useState('');
 
-  const { email } = formData;
-  
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const onSubmit = e => {
-      e.preventDefault();
-      dispatch(resetPassword({ email }));
-      setRequestSent(true);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(resetPassword({ email }));
+    setRequestSent(true);
   };
 
   if (requestSent) {
-    return <Navigate to='/' />
+    return <Navigate to="/" />;
   }
 
   return (
-    <div className='container mt-5'>
-      <h1>Request Password Reset</h1>
-      <form onSubmit={e => onSubmit(e)}>
-          <div className='form-group'>
-              <input
-                className='form-control'
-                type='email'
-                placeholder='Email'
-                name='email'
-                value={email}
-                onChange={e => onChange(e)}
-                required
-              />
-          </div>
-          <button className='btn btn-primary' to='/' type='submit'>Reset</button>
-      </form>
-    </div>
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: '15px', backgroundColor: '#232D3F' }}>
+        <Typography component="h1" variant="h5" color="white">
+          Request Password Reset
+        </Typography>
+        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            variant="outlined"
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: { color: '#fff' },
+            }}
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            Reset
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 
