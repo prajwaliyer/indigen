@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist'
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
