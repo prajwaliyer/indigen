@@ -34,7 +34,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['indigen-prod-39be9e795e98.herokuapp.com']
+ALLOWED_HOSTS = [ '127.0.0.1', 'indigen-prod-39be9e795e98.herokuapp.com']
 
 
 # Application definition
@@ -188,7 +188,7 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [os.environ.get('REACT_APP_API_URL')], # http://localhost:8000
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['https://indigen-prod-39be9e795e98.herokuapp.com'], # http://localhost:8000
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserCreateSerializer',
         'user': 'users.serializers.UserCreateSerializer',
