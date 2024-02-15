@@ -32,7 +32,7 @@ const Signup = () => {
     return <Navigate to="/" />;
   }
   if (accountCreated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/verify" />;
   }
 
   return (

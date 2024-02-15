@@ -221,7 +221,7 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
             })
             .addCase(verify.fulfilled, (state) => {
-                state.isAuthenticated = true;
+                state.isAuthenticated = false;
             })
             .addCase(verify.rejected, (state) => {
                 state.isAuthenticated = false;

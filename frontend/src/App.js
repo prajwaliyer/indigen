@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import Home from './components/Home';
 import Signup from './components/Authentication/Signup';
+import Verify from './components/Authentication/Verify';
 import Login from './components/Authentication/Login';
 import Activate from './components/Authentication/Activate';
 import ResetPassword from './components/Authentication/ResetPassword';
@@ -41,6 +42,7 @@ const ThemedApp = () => {
               <Route path="/account" element={<AccountSettings />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/verify" element={<Verify />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
               <Route path="/activate/:uid/:token" element={<Activate />} />
