@@ -33,7 +33,7 @@ def get_user_posts(request, user_id):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([AllowAny])
 def create_post(request):
     # 3 post limit for closed beta
     user_posts_count = Post.objects.filter(author=request.user).count()
@@ -74,7 +74,7 @@ def get_movie_detail(request, post_id):
         return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([AllowAny])
 def get_presigned_url(request):
     s3_client = boto3.client(
         's3',
@@ -103,7 +103,7 @@ def get_presigned_url(request):
         return Response({'error': 'Error generating presigned URL'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+@permission_classes([AllowAny])
 def increment_views(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.user.id != post.author.id:
